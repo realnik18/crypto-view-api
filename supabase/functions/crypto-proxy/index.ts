@@ -5,7 +5,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const COINCAP_BASE_URL = 'https://api.coincap.io/v2';
+const COINGECKO_BASE_URL = 'https://api.coingecko.com/api/v3';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -19,14 +19,18 @@ serve(async (req) => {
       throw new Error('endpoint is required');
     }
 
-    console.log(`Proxying request to CoinCap: ${endpoint}`);
+    console.log(`Proxying request to CoinGecko: ${endpoint}`);
 
-    const response = await fetch(`${COINCAP_BASE_URL}${endpoint}`);
+    const response = await fetch(`${COINGECKO_BASE_URL}${endpoint}`, {
+      headers: {
+        'Accept': 'application/json',
+      }
+    });
     
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`CoinCap API error (${response.status}):`, errorText);
-      throw new Error(`CoinCap API error: ${response.statusText}`);
+      console.error(`CoinGecko API error (${response.status}):`, errorText);
+      throw new Error(`CoinGecko API error: ${response.statusText}`);
     }
     
     const data = await response.json();

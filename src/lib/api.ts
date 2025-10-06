@@ -1,5 +1,5 @@
-// CoinGecko API client (free tier, real-time data)
-const BASE_URL = 'https://api.coingecko.com/api/v3';
+// CoinGecko API client via backend proxy (bypasses CORS and rate limits)
+import { supabase } from "@/integrations/supabase/client";
 
 export interface GlobalData {
   data: {
@@ -74,13 +74,20 @@ export interface MarketChartData {
 
 class CoinGeckoAPI {
   private async fetch<T>(endpoint: string): Promise<T> {
-    const response = await fetch(`${BASE_URL}${endpoint}`);
+    const { data, error } = await supabase.functions.invoke('crypto-proxy', {
+      body: { endpoint }
+    });
     
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`);
+    if (error) {
+      console.error('API proxy error:', error);
+      throw new Error(`API Error: ${error.message}`);
     }
     
-    return response.json();
+    if (data?.error) {
+      throw new Error(`API Error: ${data.error}`);
+    }
+    
+    return data as T;
   }
 
   async getGlobalData(): Promise<GlobalData> {
