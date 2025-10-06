@@ -1,5 +1,5 @@
-// CoinCap API client (free tier, no API key required, real-time data)
-const BASE_URL = 'https://api.coincap.io/v2';
+// CoinCap API client via Lovable Cloud proxy (real-time data, no CORS issues)
+import { supabase } from "@/integrations/supabase/client";
 
 export interface GlobalData {
   data: {
@@ -70,13 +70,15 @@ export interface MarketChartData {
 
 class CoinCapAPI {
   private async fetch<T>(endpoint: string): Promise<T> {
-    const response = await fetch(`${BASE_URL}${endpoint}`);
+    const { data, error } = await supabase.functions.invoke('crypto-proxy', {
+      body: { endpoint }
+    });
     
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`);
+    if (error) {
+      throw new Error(`API Error: ${error.message}`);
     }
     
-    return response.json();
+    return data as T;
   }
 
   private transformCoinCapAsset(asset: any, includeSparkline = false): Coin {
