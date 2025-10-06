@@ -94,9 +94,43 @@ class CoinGeckoAPI {
   }
 
   async getCoinDetail(id: string): Promise<CoinDetail> {
-    return this.fetch<CoinDetail>(
+    const d = await this.fetch<any>(
       `/coins/${id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`
     );
+
+    // Normalize to Coin shape for consistency across the app
+    const cd: CoinDetail = {
+      id: d.id,
+      symbol: d.symbol,
+      name: d.name,
+      image: d.image?.large || d.image?.small || d.image?.thumb || '',
+      current_price: d.market_data?.current_price?.usd ?? 0,
+      market_cap: d.market_data?.market_cap?.usd ?? 0,
+      market_cap_rank: d.market_cap_rank ?? 0,
+      fully_diluted_valuation: d.market_data?.fully_diluted_valuation?.usd ?? null,
+      total_volume: d.market_data?.total_volume?.usd ?? 0,
+      high_24h: d.market_data?.high_24h?.usd ?? 0,
+      low_24h: d.market_data?.low_24h?.usd ?? 0,
+      price_change_24h: d.market_data?.price_change_24h_in_currency?.usd ?? 0,
+      price_change_percentage_24h: d.market_data?.price_change_percentage_24h ?? 0,
+      market_cap_change_24h: d.market_data?.market_cap_change_24h ?? 0,
+      market_cap_change_percentage_24h: d.market_data?.market_cap_change_percentage_24h ?? 0,
+      circulating_supply: d.market_data?.circulating_supply ?? 0,
+      total_supply: d.market_data?.total_supply ?? null,
+      max_supply: d.market_data?.max_supply ?? null,
+      ath: d.market_data?.ath?.usd ?? 0,
+      ath_change_percentage: d.market_data?.ath_change_percentage?.usd ?? 0,
+      ath_date: d.market_data?.ath_date?.usd ?? d.genesis_date ?? '',
+      atl: d.market_data?.atl?.usd ?? 0,
+      atl_change_percentage: d.market_data?.atl_change_percentage?.usd ?? 0,
+      atl_date: d.market_data?.atl_date?.usd ?? '',
+      sparkline_in_7d: d.market_data?.sparkline_7d?.price ? { price: d.market_data.sparkline_7d.price } : undefined,
+      description: d.description,
+      links: d.links,
+      market_data: d.market_data,
+    } as CoinDetail;
+
+    return cd;
   }
 
   async getMarketChart(id: string, days: number = 7): Promise<MarketChartData> {

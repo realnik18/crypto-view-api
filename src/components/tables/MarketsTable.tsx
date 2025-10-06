@@ -153,7 +153,14 @@ export function MarketsTable() {
                 <td className="p-4 text-muted-foreground">{coin.market_cap_rank}</td>
                 <td className="p-4">
                   <div className="flex items-center gap-3">
-                    <img src={coin.image} alt={`${coin.name} logo`} className="h-8 w-8 rounded-full" />
+                    <img
+                      src={coin.image}
+                      alt={`${coin.name} logo`}
+                      className="h-8 w-8 rounded-full object-cover"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
+                      }}
+                    />
                     <div>
                       <div className="font-medium">{coin.name}</div>
                       <div className="text-sm text-muted-foreground uppercase">{coin.symbol}</div>
