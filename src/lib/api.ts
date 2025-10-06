@@ -53,6 +53,10 @@ export interface CoinDetail extends Coin {
     telegram_channel_identifier: string;
   };
   market_data?: {
+    market_cap: { usd: number };
+    total_volume: { usd: number };
+    ath: { usd: number };
+    atl: { usd: number };
     price_change_percentage_7d: number;
     price_change_percentage_14d: number;
     price_change_percentage_30d: number;

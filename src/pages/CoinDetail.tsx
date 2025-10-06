@@ -57,12 +57,12 @@ export default function CoinDetail() {
   }
 
   const stats = [
-    { label: 'Market Cap', value: formatCurrency(coin.market_cap) },
-    { label: 'Volume (24h)', value: formatCurrency(coin.total_volume) },
+    { label: 'Market Cap', value: formatCurrency(coin.market_data?.market_cap?.usd || coin.market_cap) },
+    { label: 'Volume (24h)', value: formatCurrency(coin.market_data?.total_volume?.usd || coin.total_volume) },
     { label: 'Circulating Supply', value: formatNumber(coin.circulating_supply, 0) },
-    { label: 'Max Supply', value: coin.max_supply ? formatNumber(coin.max_supply, 0) : 'N/A' },
-    { label: 'All-Time High', value: formatPrice(coin.ath) },
-    { label: 'All-Time Low', value: formatPrice(coin.atl) },
+    { label: 'Max Supply', value: formatNumber(coin.max_supply, 0) },
+    { label: 'All-Time High', value: formatPrice(coin.market_data?.ath?.usd || coin.ath) },
+    { label: 'All-Time Low', value: formatPrice(coin.market_data?.atl?.usd || coin.atl) },
   ];
 
   return (

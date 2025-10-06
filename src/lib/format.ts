@@ -2,7 +2,9 @@
  * Formatting utilities for crypto dashboard
  */
 
-export function formatCurrency(value: number, decimals = 2): string {
+export function formatCurrency(value: number | null | undefined, decimals = 2): string {
+  if (value === null || value === undefined || !Number.isFinite(value)) return 'N/A';
+  
   if (value >= 1_000_000_000) {
     return `$${(value / 1_000_000_000).toFixed(decimals)}B`;
   }
@@ -15,7 +17,9 @@ export function formatCurrency(value: number, decimals = 2): string {
   return `$${value.toFixed(decimals)}`;
 }
 
-export function formatPrice(value: number): string {
+export function formatPrice(value: number | null | undefined): string {
+  if (value === null || value === undefined || !Number.isFinite(value)) return 'N/A';
+  
   if (value >= 1) {
     return `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
@@ -32,7 +36,9 @@ export function formatPercentage(value: number | string | null | undefined, deci
   return num >= 0 ? `+${formatted}%` : `${formatted}%`;
 }
 
-export function formatNumber(value: number, decimals = 0): string {
+export function formatNumber(value: number | null | undefined, decimals = 0): string {
+  if (value === null || value === undefined || !Number.isFinite(value)) return 'N/A';
+  
   if (value >= 1_000_000_000) {
     return `${(value / 1_000_000_000).toFixed(decimals)}B`;
   }
