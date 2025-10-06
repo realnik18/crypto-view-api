@@ -19,7 +19,8 @@ A modern, responsive cryptocurrency dashboard built with React and TypeScript th
 - **State Management**: TanStack Query (React Query)
 - **Charts**: Recharts
 - **Animations**: Framer Motion
-- **API**: CoinGecko API
+- **API**: CoinGecko API via Supabase Edge Functions
+- **Backend**: Supabase Edge Functions (proxy)
 - **Routing**: React Router DOM
 
 ## Getting Started
@@ -28,6 +29,7 @@ A modern, responsive cryptocurrency dashboard built with React and TypeScript th
 
 - Node.js 18+ and npm installed
 - Git
+- Supabase account (for API proxy)
 
 ### Installation
 
@@ -42,12 +44,19 @@ cd crypto-view-api
 npm install
 ```
 
-3. Start the development server:
+3. Set up environment variables:
+```bash
+# Create .env.local file with your Supabase credentials
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
+```
+
+4. Start the development server:
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:5173](http://localhost:5173) in your browser
+5. Open [http://localhost:8080](http://localhost:8080) in your browser
 
 ### Available Scripts
 
@@ -73,7 +82,7 @@ src/
 
 ## API Integration
 
-This project uses the CoinGecko API (free tier) to fetch real-time cryptocurrency data. The API client is implemented in `src/lib/api.ts` with proper error handling and TypeScript interfaces.
+This project uses the CoinGecko API (free tier) to fetch real-time cryptocurrency data. The API client is implemented in `src/lib/api.ts` with proper error handling and TypeScript interfaces. A Supabase Edge Function is used as a proxy to handle CORS and rate limiting.
 
 ## Contributing
 
