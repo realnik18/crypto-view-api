@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Star, TrendingUp, TrendingDown } from 'lucide-react';
+import { ArrowLeft, Star, TrendingUp, TrendingDown, Coins } from 'lucide-react';
 import { coinGeckoAPI } from '@/lib/api';
 import { formatPrice, formatCurrency, formatPercentage, formatNumber, getPercentageColor } from '@/lib/format';
 import { isInWatchlist, addToWatchlist, removeFromWatchlist } from '@/lib/localStorage';
@@ -15,8 +15,9 @@ export default function CoinDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [inWatchlist, setInWatchlist] = useState(isInWatchlist(id || ''));
+  const [imageError, setImageError] = useState(false);
 
-  const { data: coin, isLoading } = useQuery({
+  const { data: coin, isLoading, error } = useQuery({
     queryKey: ['coin', id],
     queryFn: () => coinGeckoAPI.getCoinDetail(id!),
     enabled: !!id,
@@ -35,23 +36,35 @@ export default function CoinDetail() {
 
   if (isLoading) {
     return (
-      <div className="animate-pulse space-y-6">
-        <div className="h-12 bg-muted rounded w-1/3"></div>
-        <div className="h-96 bg-muted rounded"></div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-24 bg-muted rounded"></div>
-          ))}
+      <div className="max-w-7xl mx-auto">
+        <div className="animate-pulse space-y-6">
+          <div className="h-12 bg-muted rounded w-32"></div>
+          <div className="h-64 bg-muted rounded"></div>
+          <div className="h-96 bg-muted rounded"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="h-32 bg-muted rounded"></div>
+            ))}
+          </div>
         </div>
       </div>
     );
   }
 
-  if (!coin) {
+  if (!coin || error) {
     return (
-      <div className="text-center py-12">
-        <h2 className="text-2xl font-bold mb-4">Coin not found</h2>
-        <Button onClick={() => navigate('/')}>Back to Overview</Button>
+      <div className="max-w-7xl mx-auto">
+        <Card className="glass-strong p-12 text-center">
+          <Coins className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+          <h2 className="text-2xl font-bold mb-4">Coin not found</h2>
+          <p className="text-muted-foreground mb-6">
+            The cryptocurrency you're looking for doesn't exist or couldn't be loaded.
+          </p>
+          <Button onClick={() => navigate('/')} size="lg">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Overview
+          </Button>
+        </Card>
       </div>
     );
   }
@@ -94,11 +107,18 @@ export default function CoinDetail() {
               <div className="flex items-center gap-6">
                 <div className="relative">
                   <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full"></div>
-                  <img 
-                    src={coin.image} 
-                    alt={`${coin.name} logo`} 
-                    className="relative h-20 w-20 rounded-full ring-2 ring-primary/30" 
-                  />
+                  {!imageError && coin.image ? (
+                    <img 
+                      src={coin.image} 
+                      alt={`${coin.name} logo`} 
+                      className="relative h-20 w-20 rounded-full ring-2 ring-primary/30 object-cover" 
+                      onError={() => setImageError(true)}
+                    />
+                  ) : (
+                    <div className="relative h-20 w-20 rounded-full ring-2 ring-primary/30 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                      <Coins className="h-10 w-10 text-primary/60" />
+                    </div>
+                  )}
                 </div>
                 <div>
                   <div className="flex items-center gap-3 mb-2">
@@ -113,7 +133,7 @@ export default function CoinDetail() {
                     </div>
                   </div>
                   <div className={`flex items-center gap-2 mt-3 text-xl font-semibold ${getPercentageColor(coin.price_change_percentage_24h)}`}>
-                    {coin.price_change_percentage_24h >= 0 ? (
+                    {(coin.price_change_percentage_24h || 0) >= 0 ? (
                       <TrendingUp className="h-5 w-5" />
                     ) : (
                       <TrendingDown className="h-5 w-5" />
@@ -191,6 +211,12 @@ export default function CoinDetail() {
                     {formatPrice(coin.price_change_24h)}
                   </span>
                 </div>
+                <div className="flex justify-between items-center p-4 rounded-lg bg-muted/30">
+                  <span className="text-muted-foreground">Market Cap Change (24h)</span>
+                  <span className={`font-bold text-lg ${getPercentageColor(coin.market_cap_change_percentage_24h)}`}>
+                    {formatPercentage(coin.market_cap_change_percentage_24h)}
+                  </span>
+                </div>
               </div>
             </Card>
 
@@ -202,13 +228,23 @@ export default function CoinDetail() {
                   Real-time market data and statistics for {coin.name} ({coin.symbol.toUpperCase()}).
                 </p>
                 <div className="pt-4 border-t border-border/30">
-                  <div className="flex items-center gap-2 text-sm">
+                  <div className="flex items-center justify-between">
                     <span className="font-medium">Market Cap Rank:</span>
-                    <span className="px-3 py-1 bg-primary/10 text-primary rounded-full font-bold">
-                      #{coin.market_cap_rank}
+                    <span className="px-4 py-2 bg-primary/10 text-primary rounded-full font-bold text-lg">
+                      #{coin.market_cap_rank || 'N/A'}
                     </span>
                   </div>
                 </div>
+                {coin.ath && (
+                  <div className="pt-4 border-t border-border/30">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">From ATH:</span>
+                      <span className={`font-bold ${getPercentageColor(coin.ath_change_percentage)}`}>
+                        {formatPercentage(coin.ath_change_percentage)}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             </Card>
           </div>
