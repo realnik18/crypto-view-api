@@ -1,73 +1,94 @@
-# Welcome to your Lovable project
+# CryptoView - Real-time Cryptocurrency Dashboard
 
-## Project info
+A modern, responsive cryptocurrency dashboard built with React and TypeScript that provides real-time market data, interactive charts, and portfolio tracking capabilities.
 
-**URL**: https://lovable.dev/projects/68e11870-8ace-42da-8e5c-535290a73913
+## Features
 
-## How can I edit this code?
+- 📊 **Real-time Market Data**: Live cryptocurrency prices and market statistics
+- 📈 **Interactive Charts**: Beautiful price charts with multiple timeframes (24h, 7d, 30d)
+- ⭐ **Watchlist**: Track your favorite cryptocurrencies
+- 🔍 **Search & Sort**: Find and organize cryptocurrencies by various metrics
+- 📱 **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- 🎨 **Modern UI**: Glass morphism design with smooth animations
+- ♿ **Accessible**: Built with accessibility best practices
 
-There are several ways of editing your application.
+## Technologies Used
 
-**Use Lovable**
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: Tailwind CSS, shadcn/ui components
+- **State Management**: TanStack Query (React Query)
+- **Charts**: Recharts
+- **Animations**: Framer Motion
+- **API**: CoinGecko API
+- **Routing**: React Router DOM
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/68e11870-8ace-42da-8e5c-535290a73913) and start prompting.
+## Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js 18+ and npm installed
+- Git
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd crypto-view-api
+```
 
-Follow these steps:
+2. Install dependencies:
+```bash
+npm install
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+4. Open [http://localhost:5173](http://localhost:5173) in your browser
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Available Scripts
 
-**Use GitHub Codespaces**
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Project Structure
 
-## What technologies are used for this project?
+```
+src/
+├── components/          # Reusable UI components
+│   ├── charts/         # Chart components
+│   ├── stats/          # Statistics components
+│   ├── tables/         # Table components
+│   └── ui/             # Base UI components (shadcn/ui)
+├── hooks/              # Custom React hooks
+├── lib/                # Utility functions and API client
+├── pages/              # Page components
+└── main.tsx           # Application entry point
+```
 
-This project is built with:
+## API Integration
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+This project uses the CoinGecko API (free tier) to fetch real-time cryptocurrency data. The API client is implemented in `src/lib/api.ts` with proper error handling and TypeScript interfaces.
 
-## How can I deploy this project?
+## Contributing
 
-Simply open [Lovable](https://lovable.dev/projects/68e11870-8ace-42da-8e5c-535290a73913) and click on Share -> Publish.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## Can I connect a custom domain to my Lovable project?
+## License
 
-Yes, you can!
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Acknowledgments
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- Data provided by [CoinGecko API](https://www.coingecko.com/en/api)
+- UI components from [shadcn/ui](https://ui.shadcn.com/)
+- Icons from [Lucide React](https://lucide.dev/)
