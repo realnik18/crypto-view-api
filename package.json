@@ -1,8 +1,16 @@
 {
   "name": "crypto-view-dashboard",
-  "private": true,
   "version": "1.0.0",
   "type": "module",
+  "description": "A modern, responsive cryptocurrency dashboard built with React and TypeScript",
+  "keywords": ["cryptocurrency", "dashboard", "react", "typescript", "crypto", "trading", "market-data"],
+  "author": "Nikita",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/realnik18/crypto-view-api.git"
+  },
+  "homepage": "https://crypto-view-api.vercel.app/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

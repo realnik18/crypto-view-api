@@ -19,7 +19,7 @@ export function MarketsTable() {
   const [sortField, setSortField] = useState<SortField>('market_cap_rank');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [watchlist, setWatchlist] = useState<string[]>(() => 
-    JSON.parse(localStorage.getItem('crypto-dashboard-watchlist') || '[]').map((item: any) => item.id)
+    JSON.parse(localStorage.getItem('crypto-dashboard-watchlist') || '[]').map((item: { id: string }) => item.id)
   );
 
   const { data: coins, isLoading } = useQuery({
@@ -31,7 +31,7 @@ export function MarketsTable() {
   const filteredAndSorted = useMemo(() => {
     if (!coins) return [];
 
-    let filtered = coins.filter(
+    const filtered = coins.filter(
       (coin) =>
         coin.name.toLowerCase().includes(search.toLowerCase()) ||
         coin.symbol.toLowerCase().includes(search.toLowerCase())

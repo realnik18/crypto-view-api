@@ -101,7 +101,7 @@ class CoinGeckoAPI {
   }
 
   async getCoinDetail(id: string): Promise<CoinDetail> {
-    const d = await this.fetch<any>(
+    const d = await this.fetch<CoinDetail>(
       `/coins/${id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`
     );
 
