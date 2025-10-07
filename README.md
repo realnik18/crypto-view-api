@@ -2,6 +2,8 @@
 
 A modern, responsive cryptocurrency dashboard built with React and TypeScript that provides real-time market data, interactive charts, and portfolio tracking capabilities.
 
+🌐 **Live Demo**: [https://crypto-view-api.vercel.app/](https://crypto-view-api.vercel.app/)
+
 ## Features
 
 - 📊 **Real-time Market Data**: Live cryptocurrency prices and market statistics
